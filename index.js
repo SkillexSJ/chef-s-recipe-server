@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors());
 
-// MongoDB URI and client
+// MongoDB
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.5xpeiw3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 const client = new MongoClient(uri, {
@@ -21,7 +21,6 @@ const client = new MongoClient(uri, {
   },
 });
 
-// Declare recipesCollection globally to use it inside route handlers
 let recipesCollection;
 
 async function run() {
@@ -38,12 +37,11 @@ async function run() {
 
 run();
 
-// Root test
 app.get("/", (req, res) => {
   res.send("✅ Server is running");
 });
 
-// 🔹 Get all recipes, optional email filter
+//  Get all recipes
 app.get("/recipes", async (req, res) => {
   const userEmail = req.query.email;
   const filter = userEmail ? { userEmail } : {};
@@ -57,7 +55,7 @@ app.get("/recipes", async (req, res) => {
   }
 });
 
-// 🔹 Get recipe by ID (NOT delete!)
+// Get recipe by ID
 app.get("/recipes/:id", async (req, res) => {
   const id = req.params.id;
 
@@ -79,7 +77,7 @@ app.get("/recipes/:id", async (req, res) => {
   }
 });
 
-// 🔹 Add a new recipe
+// Add a new recipe
 app.post("/recipes", async (req, res) => {
   const recipe = req.body;
 
@@ -96,7 +94,7 @@ app.post("/recipes", async (req, res) => {
   }
 });
 
-// 🔹 Delete a recipe
+//  Delete a recipe
 app.delete("/recipes/:id", async (req, res) => {
   const id = req.params.id;
 
@@ -114,7 +112,7 @@ app.delete("/recipes/:id", async (req, res) => {
   }
 });
 
-// 🔹 Update a recipe
+// Update a recipe
 app.put("/recipes/:id", async (req, res) => {
   const id = req.params.id;
   const updatedRecipe = req.body;
